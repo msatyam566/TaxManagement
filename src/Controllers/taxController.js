@@ -54,8 +54,7 @@ const getTaxPayerdetails = async function (req, res) {
         let filter = {
             ...query
         }
-
-    
+        if(user[role]== 'taxAccountant',"admin"){
         const filterByQuery = await taxModel.find(filter)
         if (filterByQuery.length == 0) {
             return res.status(404).send({ status: false, msg: "No taxPayer found" })
@@ -63,12 +62,36 @@ const getTaxPayerdetails = async function (req, res) {
         console.log("Data fetched successfully")
         return res.status(200).send({ status: true, msg: "taxPayerDetails", data: filterByQuery })
     }
+        }
     catch (err) {
         console.log(err)
         res.status(500).send({ status: false, msg: err.message })
     }
     }
 
+    const TaxDetailsQuery = async function(req,res){
+
+        let filters = req.query
+        
+        filters ={userId, data , taxStatus }
+        
+        if(user[role]== 'taxPayer'){
+    
+    
+            if (userId !== decodedToken.userId ){
+                 return res.send("you are  not authorized to do that ")
+            }
+        }
+    
+        else{
+    
+            const TaxDetails  = await taxModel.find(filters)
+    
+            return res.send(200)(TaxDetails)
+    
+        }
+    
+    }
 
 
 
@@ -78,4 +101,5 @@ const getTaxPayerdetails = async function (req, res) {
 
 
 
-module.exports = {CreateTax,getTaxPayerdetails}
+
+module.exports = {CreateTax,getTaxPayerdetails,TaxDetailsQuery}

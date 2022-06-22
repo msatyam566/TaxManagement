@@ -125,4 +125,10 @@ const UserLogin = async (req, res) => {
     }
 }
 
+
+
+
+
+
+
 module.exports={CreateUser,UserLogin}
