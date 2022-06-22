@@ -86,8 +86,7 @@ const getTaxPayerdetails = async function (req, res) {
         else{
     
             const TaxDetails  = await taxModel.find(filters)
-    
-            return res.send(200)(TaxDetails)
+             return res.send(200)(TaxDetails)
     
         }
     

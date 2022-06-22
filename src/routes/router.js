@@ -12,7 +12,7 @@ router.post("/loginuser", userController.UserLogin)
 
 router.post("/registerTax",taxController.CreateTax)
 router.get("/gettaxPayerDetails",taxController.getTaxPayerdetails)
-
+router.get("/detailsbyquery",taxController.TaxDetailsQuery)
 
 
 
