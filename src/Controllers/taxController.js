@@ -82,19 +82,22 @@ return res.status(201).send({ status: true, msg: "tax created successfully", dat
 
     const TaxDetailsQuery = async function(req,res){
         try {
-        let queryofTaxDeatils = req.query
+        let queryofTaxDetails = req.query.userId
         const userIdFromToken = req.userId
-        queryofTaxDeatils= {  taxDue,date }
+        queryofTaxDetails= { taxStatus ,taxDue,date }
 
-        if(!taxDue){
+        if(!taxDue && taxStatus && date){
             return res.status(400).send({status:false,messege:"please add query"})
         }
+
+
+
             if (userIdFromToken != id && (isValidrole(role)== 'taxPayer')) {
                         return res.status(403).send({status: false,message: "Unauthorized access.", });
                     }
         {
 
-            const fullTaxDetails  = await taxModel.find(queryofTaxDeatils)
+            const fullTaxDetails  = await taxModel.find(queryofTaxDetails)
             return  res.status(200).send({fullTaxDetails})
     
         }
@@ -110,7 +113,7 @@ return res.status(201).send({ status: true, msg: "tax created successfully", dat
 
             const updateDetails  = req.body
             const userIdFromToken = req.userId
-            const userId = req.params.userId
+            const userId = req.userIdFromParams
             
           
             const userDetails = await userModel.findById(userId)
@@ -119,9 +122,13 @@ return res.status(201).send({ status: true, msg: "tax created successfully", dat
             return res.status(404).send({status:false,messege:"no such user found please check userid "})
              }
 
-             if (userIdFromToken != id) {
-                return res.status(403).send({status: false,message: "Unauthorized access.", });
+             if (userIdFromToken != userIdFromParams) {
+                return res.status(403).send({
+                  status: false,
+                  message: "Unauthorized access.",
+                });
             }
+    
 
     
         if(userDetails.role=="taxpayer"){
@@ -137,9 +144,48 @@ return res.status(201).send({ status: true, msg: "tax created successfully", dat
  
         }catch (error) {
             console.log(error)
-            return res.status(500).send({ status: false, msg: err.message })
+            return res.status(500).send({ status: false, msg: error.message })
         }
     }
+
+//========================change tax status=================//
+
+    const changeTaxStatus = async function(req,res){
+    
+        let userId  = req.params.userId
+        const userIdFromToken = req.userId
+        let changeStatus = req.query.status
+        let taxId  = req.query.taxId  
+    
+    
+    
+        let userCheck = await userModel.findById(userId)
+        if(!userCheck ){
+            return res.status(404).send({status:false,message:'no such user Found '})
+        }
+    
+        let taxIdCheck = await taxModel.findById(taxId)
+        if(!taxIdCheck){
+            return res.status(404).send({status:false,message:'no tax details  Found '})
+        }
+        if (userIdFromToken != userIdFromParams) {
+            return res.status(403).send({
+              status: false,
+              message: "Unauthorized access.",
+            });
+        }
+
+
+
+    
+        let updatedTaxDetails = await taxModel.findOneAndUpdate(taxId,{taxStatus:changeStatus},{new:true})
+        return res.status(200).send(updatedTaxDetails)
+    
+    
+    
+    
+    }
+    
 
 
     //===================creating a tax due=======================//
@@ -200,4 +246,4 @@ return res.status(201).send({ status: true, msg: "tax created successfully", dat
 
 
 
-module.exports = {CreateTax,TaxDetailsQuery,updatePayerDetails,createTaxDue}
+module.exports = {CreateTax,TaxDetailsQuery,updatePayerDetails,changeTaxStatus,createTaxDue}

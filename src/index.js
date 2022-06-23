@@ -13,5 +13,5 @@ mongoose.connect("mongodb+srv://msatyam566:5RKuruCHR4gM2ZDi@cluster0.dqzcc.mongo
 .catch(err => console.log('Connection error'))
 
 app.listen(process.env.PORT || 3000, function() {
-    console.log('Express app running on port ' + (process.env.PORT || 3000));
+    console.log('Express app is live on port ' + (process.env.PORT || 3000));
 });

@@ -13,8 +13,9 @@ router.get("/gettaxPayerDetails",userController.getTaxPayerdetails)
 
 router.post("/registerTax",taxController.CreateTax)
 router.get("/detailsbyquery",taxController.TaxDetailsQuery)
-router.put("/updateDetailsofpayer",auth.userAuth,taxController.updatePayerDetails)
+router.put("/updateDetailsofpayer/:userId",auth.userAuth,taxController.updatePayerDetails)
 router.post("/createTaxDue",taxController.createTaxDue)
+router.put("/updatetaxsatatus/:userId",auth.userAuth,taxController.changeTaxStatus)
 
 
 
