@@ -3,11 +3,26 @@ const taxModel = require("../Models/TaxModel")
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-const isValidrole = (input) => ["tax payer","tax accountant", "admin"].indexOf(input) !== -1
+
+
+const isValidrole = (input) => ["taxpayer","taxAccountant", "admin"].indexOf(input) !== -1
 
 let isvalidPanNumber = function (value) {
     if (value.toString().length == 6) return true
 };
+
+let isValidRole =  function (){
+    const userDetails = userModel.findById(userId)
+    if(!userDetails){
+
+        return res.status(404).send({status:false,messege:"no such user found please check userid "})
+    }
+
+    else{
+        if(userDetails.role=='admin'||userDetails.role=='taxAccountant') return true
+    }
+    return false
+}
 
 
 const CreateUser = async (req,res)=>{
@@ -45,14 +60,17 @@ try {
             return res.status(400).send({status:false, message:"pan number should be valid"})
         }
     }
-
+    let duplicatePannumber = await userModel.findOne({ panNumber: panNumber })
+        if (duplicatePannumber) {
+            return res.status(400).send({ status: false, message: `pan Number Already Present` });
+        }
     if (!role) {
         return res.status(400).send({ status: false, message: "please provide user role" })
 
     }
     if(role){
         if(!isValidrole(role)){
-            return res.status(400).send({status:false, message:"valid status is required. [tax payer,tax accountant, admin]"})
+            return res.status(400).send({status:false, message:"valid status is required. [taxpayer,taxAccountant, admin]"})
         }
     }
     if(!city){
@@ -125,10 +143,38 @@ const UserLogin = async (req, res) => {
     }
 }
 
+//===========================getTaxPayerDetails========================//
+
+
+
+
+const getTaxPayerdetails = async function (req, res) {
+    try {
+        let query = req.query
+        let filter = {
+            ...query
+        }
+    
+      if(isValidRole.role == "taxpayer"){
+        return res.status(403).send({status:false,messege:"you are not authorized to check other details"})
+        
+      }
+      let filterByQuery = await userModel.find(filter)
+            if (filterByQuery.length == 0) {
+                return res.status(404).send({ status: false, msg: "No taxPayer found" })
+            }
+            console.log("Data fetched successfully")
+            return res.status(200).send({ status: true, msg: "taxPayerDetails", data: filterByQuery })
+    
+
+ } catch (error) {
+        console.log(error)
+        res.status(500).send({ status: false, msg: error.message })
+    }
+}
 
 
 
 
 
-
-module.exports={CreateUser,UserLogin}
+module.exports={CreateUser,getTaxPayerdetails,UserLogin}

@@ -9,10 +9,12 @@ const auth = require("../middleware/auth")
 
 router.post("/register",userController.CreateUser)
 router.post("/loginuser", userController.UserLogin)
+router.get("/gettaxPayerDetails",userController.getTaxPayerdetails)
 
 router.post("/registerTax",taxController.CreateTax)
-router.get("/gettaxPayerDetails",taxController.getTaxPayerdetails)
 router.get("/detailsbyquery",taxController.TaxDetailsQuery)
+router.put("/updateDetailsofpayer",auth.userAuth,taxController.updatePayerDetails)
+router.post("/createTaxDue",taxController.createTaxDue)
 
 
 

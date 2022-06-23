@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId
 
 
-const taxSchema = new mongoose.Schema({
+const taxSchema1 = new mongoose.Schema({
 
    userId : {type:Object, required:true, ref:"userModel"},
 
@@ -10,7 +10,7 @@ const taxSchema = new mongoose.Schema({
 
    city : {type:String,required:true},
 
-   date: { type:Date,required:true},
+   date: { type:Date,required:true,},
 
    dueDate : {required:true, type:Boolean},
 
@@ -18,9 +18,11 @@ const taxSchema = new mongoose.Schema({
 
    taxpercent: {type:String,enum:["5","12","18","28"]},
 
-   status:{type:String,enum:['New','paid','delayed']},
+   status:{type:String,enum:['new','paid','delayed']},
 
-   taxDue:{type:String,enum:['delayed','new']}     //by tax accountant
+   taxDue:{type:String,enum:['delayed','new']} ,    //by tax accountant
+
+   isDeleted : {type:Boolean, default:false}
 
 
     
@@ -28,4 +30,4 @@ const taxSchema = new mongoose.Schema({
 
 
 
-   module.exports = mongoose.model("taxSchema", taxSchema)
+   module.exports = mongoose.model("taxSchema1", taxSchema1)
