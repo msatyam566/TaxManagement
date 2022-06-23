@@ -6,3 +6,4 @@
 => i have created api for creating diffrent user and handle validations 
 => i have created api for creation of tax with some validation 
 => i have created a protective api with hashing of password for authorization
+=> i have created 8 apis for this project like tax due tax status included creating

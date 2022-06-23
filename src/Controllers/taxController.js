@@ -117,6 +117,29 @@ return res.status(201).send({ status: true, msg: "tax created successfully", dat
     }
     }
 
+
+    //==============get tax details by id =================//
+
+
+    const getTaxDetailsByUserId = async function (req,res){
+        try{
+        let userId = req.params.userId
+        const existuser = await userModel.findById(userId)
+    
+        if(!existuser){
+            return res.status(400).send({status:false,messege:"Bad request"})
+        } 
+        let taxDetailsbyId = await taxModel.find({userId}) 
+        return res.send.status(200).send(taxDetailsbyId)
+    }
+    catch (error) {
+        console.log(error)
+        return res.status(500).send({ status: false, msg: error.message })
+    }
+}
+
+
+
 //======================Updatation of payerDetails only by tax accountant and admin=================//
 
     const updatePayerDetails = async function(req,res){
@@ -254,4 +277,4 @@ return res.status(201).send({ status: true, msg: "tax created successfully", dat
 
 
 
-module.exports = {CreateTax,TaxDetailsQuery,updatePayerDetails,changeTaxStatus,createTaxDue}
+module.exports = {CreateTax,TaxDetailsQuery,getTaxDetailsByUserId,updatePayerDetails,changeTaxStatus,createTaxDue}
