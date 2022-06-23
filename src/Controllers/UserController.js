@@ -5,13 +5,13 @@ const jwt = require('jsonwebtoken')
 
 
 
-const isValidrole = (input) => ["taxpayer","taxAccountant", "admin"].indexOf(input) !== -1
+let isValidrole = (input) => ["taxpayer","taxAccountant", "admin"].indexOf(input) !== -1
 
 let isvalidPanNumber = function (value) {
     if (value.toString().length == 6) return true
 };
 
-let isValidRole =  function (){
+let validRole =  function (){
     const userDetails = userModel.findById(userId)
     if(!userDetails){
 
@@ -155,7 +155,7 @@ const getTaxPayerdetails = async function (req, res) {
             ...query
         }
     
-      if(isValidRole.role == "taxpayer"){
+      if(validRole.role == "taxpayer"){
         return res.status(403).send({status:false,messege:"you are not authorized to check other details"})
         
       }
